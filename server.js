@@ -56,12 +56,13 @@ app.post('/', function (req, res) {
 
   var httpreq = https.request(options, function (response) {
    
+    let chunkBody = ""
     response.on('data', function (chunk) {
-      console.log("body: " + chunk);
-      res.send(chunk);
-    });
-    response.on('end', function() {
-      //res.send('ok');
+      chunkBody = ""+chunk;
+     });
+
+    response.on('end', function() { 
+        res.status(response.statusCode).send(chunkBody);
     })
   });
   httpreq.write(data); 
