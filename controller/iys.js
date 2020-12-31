@@ -11,6 +11,7 @@ class IysController {
     const { host } = reqBody;
     let options = {};
 
+    /*
     if (!isLoginRequest) {
       next(
         ApiError.badRequest(
@@ -20,7 +21,7 @@ class IysController {
       );
       return;
     }
-
+*/
     if (!serviceURL) {
       next(
         ApiError.badRequest("AVC001", "serviceURL field should be provided")
