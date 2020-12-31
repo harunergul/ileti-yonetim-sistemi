@@ -1,11 +1,6 @@
 const express = require('express')
+const iysController = require('../controller/iys')
 const router = express.Router()
-var querystring = require('querystring');
-var http = require('http');
 
-
-router.get('/', (req, resp)=>{
-    resp.send("Hay")
-})
-
+router.post('/', iysController.api);
 module.exports = router
