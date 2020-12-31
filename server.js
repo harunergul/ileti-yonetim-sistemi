@@ -5,7 +5,7 @@ const apiErrorHandler = require('./error/api-error-handler');
 PORT = 1990
 
 app.use(express.json()); //Used to parse JSON bodies
-app.use('/', router);
+app.use("/", router);
 app.use(apiErrorHandler)
 app.listen(PORT);
 console.log("listenting on port "+PORT)

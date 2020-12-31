@@ -29,8 +29,10 @@ class IysController {
       return;
     }
 
-    if (!data) { 
-      next(ApiError.badRequest("AVC002", "data field must be provided and should "));
+    if (!data) {
+      next(
+        ApiError.badRequest("AVC002", "data field must be provided and should ")
+      );
       return;
     }
 
@@ -83,27 +85,27 @@ class IysController {
       });
     });
 
-    httpreq.on('error', function(error){
-        console.log(error);
+    httpreq.on("error", function (error) {
+      console.log(error);
 
-        if(error.errno='ENOTFOUND'){
-            next(
-                ApiError.badRequest(
-                  "AVC005",
-                  "There is a mistake in host name: "+error.hostname
-                )
-              );
-              return;
-        }
-        else{
-            "AVC00X"
-            ApiError.badRequest("AVC00X","Unhandled expcetion, errno = ", error.errno);
-            return;
-        }
-
-
-        
-    })
+      if ((error.errno = "ENOTFOUND")) {
+        next(
+          ApiError.badRequest(
+            "AVC005",
+            "There is a mistake in host name: " + error.hostname
+          )
+        );
+        return;
+      } else {
+        ("AVC00X");
+        ApiError.badRequest(
+          "AVC00X",
+          "Unhandled expcetion, errno = ",
+          error.errno
+        );
+        return;
+      }
+    });
     httpreq.write(data);
     httpreq.end();
   }
