@@ -43,7 +43,7 @@ class IysController {
         host: host,
         port: 443,
         path: serviceURL,
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Content-Length": Buffer.byteLength(data),

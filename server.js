@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 const router = require('./routes');
 const apiErrorHandler = require('./error/api-error-handler');
-PORT = 8888
+PORT = 1990
 
 app.use(express.json()); //Used to parse JSON bodies
 app.use('/', router);
