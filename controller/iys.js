@@ -2,7 +2,12 @@ var https = require("https");
 const ApiError = require("../error/ApiError");
 class IysController {
   api(req, res, next) {
+    console.log("---------")
+    console.log( new Date())
+    console.log("Requested Date: "+new Date().toLocaleDateString('tr'));
     console.log(req.body);
+
+
     let reqBody = req.body;
     const { isLoginRequest } = reqBody;
     const { serviceURL } = reqBody;
