@@ -1,12 +1,31 @@
-var https = require("https");
+let https = require("https");
+const dayjs = require("dayjs"); 
+const winston = require('winston');
+require('winston-daily-rotate-file'); 
 const ApiError = require("../error/ApiError");
+
+var transport = new winston.transports.DailyRotateFile({
+  filename: 'iys-%DATE%.log',
+  datePattern: 'YYYY-MM-DD',
+  zippedArchive: true,
+  maxSize: '20m',
+  dirname:'logs/iys',
+  maxFiles: '14d'
+});
+
+const logger = winston.createLogger({
+  transports: [
+    transport
+   ]
+});
+ 
+let getFormattedDate = function(){
+  return dayjs(new Date()).format('DD-MM-YYYY hh:mm:ss')
+}
 class IysController {
   api(req, res, next) {
-    console.log("---------")
-    console.log( new Date())
-    console.log("Requested Date: "+new Date().toLocaleDateString('tr'));
-    console.log(req.body);
-
+    logger.info("--------")
+    logger.info("Request Date "+getFormattedDate());
 
     let reqBody = req.body;
     const { isLoginRequest } = reqBody;
@@ -15,6 +34,8 @@ class IysController {
     const { token } = reqBody;
     const { host } = reqBody;
     let options = {};
+
+    logger.info(options)
 
     /*
     if (!isLoginRequest) {
@@ -28,6 +49,7 @@ class IysController {
     }
 */
     if (!serviceURL) {
+      logger.error("ServiceURL does not exist in the request body");
       next(
         ApiError.badRequest("AVC001", "serviceURL field should be provided")
       );
@@ -35,6 +57,7 @@ class IysController {
     }
 
     if (!data) {
+      logger.error("Data field must be provided");
       next(
         ApiError.badRequest("AVC002", "data field must be provided and should ")
       );
@@ -42,6 +65,7 @@ class IysController {
     }
 
     if (!host) {
+      logger.error("Host field must be provided");
       next(ApiError.badRequest("AVC003", "host field must be provided"));
       return;
     }
@@ -59,6 +83,7 @@ class IysController {
       };
     } else {
       if (!token) {
+        logger.error("Token required for non authentication request");
         next(
           ApiError.badRequest(
             "AVC004",
@@ -86,13 +111,13 @@ class IysController {
       });
 
       response.on("end", function () {
+        logger.info(chunkBody);
         res.status(response.statusCode).send(chunkBody);
       });
     });
 
     httpreq.on("error", function (error) {
-      console.log(error);
-
+      logger.error(error);
       if ((error.errno = "ENOTFOUND")) {
         next(
           ApiError.badRequest(
@@ -102,11 +127,12 @@ class IysController {
         );
         return;
       } else {
-        ("AVC00X");
-        ApiError.badRequest(
-          "AVC00X",
-          "Unhandled expcetion, errno = ",
-          error.errno
+        next(
+          ApiError.badRequest(
+            "AVC00X",
+            "Unhandled expcetion, errno = ",
+            error.errno
+          )
         );
         return;
       }
