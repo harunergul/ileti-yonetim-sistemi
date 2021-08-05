@@ -1,5 +1,5 @@
 const dayjs = require("dayjs");  
-let https = require("https");
+var https = require("https");
 const winston = require('winston');
 require('winston-daily-rotate-file');
 const ApiError = require("../error/ApiError");
